@@ -1,0 +1,197 @@
+.profile-section {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 0.75em;
+    background-color: white;
+
+    margin-bottom: 1em;
+}
+.profile-section > .subtitle {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.9em;
+}
+
+.profile-section:not(.profile) {
+    padding: 1em 2em 1em 2em;
+}
+
+.profile-section h1,
+.profile-section h2,
+.profile-section h3,
+.profile-section h5,
+.profile-section h6,
+.profile-section p {
+    margin: 0;
+    padding: 0;
+}
+
+.profile-top {
+    position: relative;
+    border-radius: 0.75em 0.75em 0 0;
+    z-index: 2;
+}
+
+.profile-top .banner {
+    width: 100%;
+    height: 12.5rem;
+    overflow: hidden;
+}
+.profile-top .banner img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75em 0.75em 0 0;
+}
+
+.profile-top .profilePicture {
+    position: absolute;
+    bottom: -3em;
+    left: 2em;
+}
+.profile-top .profilePicture img {
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    border: 4px solid white;
+}
+
+.profile-bottom {
+    background-color: white;
+    min-height: 12.5em;
+    border-radius: 0 0 0.75em 0.75em;
+    padding: 2em;
+    padding-top: 3.5em;
+
+    position: relative;
+}
+.tooltip {
+    position: absolute;
+    top: 90% !important;
+    left: 85% !important;
+    z-index: 100;
+    transform: translate(90%, 90%) !important;
+}
+.profile-bottom .edit {
+    position: absolute;
+    right: 2em;
+    top: 1.5em;
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+.profile-bottom .editImage {
+    position: absolute;
+    right: 4em;
+    top: 1.5em;
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.profile-bottom h3,
+.profile-bottom h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.profile-bottom h6 {
+    margin-bottom: 0.4em;
+}
+
+.profile-bottom span.location {
+    display: block;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.3em;
+}
+.profile-bottom span.connections {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.profile-bottom span.connections b {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.analytics {
+    margin-top: 1em;
+}
+.analytics .column {
+    display: flex;
+}
+.analytics .icon {
+    margin-right: 0.5em;
+    color: rgba(0, 0, 0, 0.65);
+}
+.analytics .content {
+}
+.analytics .title {
+    display: block;
+    font-weight: 600;
+    margin-bottom: -0.25em;
+}
+.analytics .description {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.profile-section.activity {
+    border-radius: 0.75em 0.75em 0 0;
+    margin-bottom: 0;
+}
+
+.activity h6 {
+    margin-top: 1em;
+}
+.activity p:last-child {
+    font-size: 0.925em;
+}
+
+.activity-button {
+    background-color: white;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: 1em;
+    border-radius: 0 0 0.75em 0.75em;
+    cursor: pointer;
+}
+
+.activity-button:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+.about p {
+    margin-top: 1em;
+}
+
+/* mobile thingies */
+@media only screen and (max-width: 768px) {
+    .profile-top .profilePicture {
+        position: absolute;
+        bottom: -3em;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    right: 1em;
+    top: 0.85em;
+    cursor: pointer;
+}
+
+.tip {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.8em;
+}
+
+.pilled {
+    border-radius: 5em;
+    padding-left: 1.25em;
+    padding-right: 1.25em;
+}
+.modal-body .form-label {
+    margin-bottom: 0.1em;
+}
+
+.image-preview {
+    width: 100%;
+}

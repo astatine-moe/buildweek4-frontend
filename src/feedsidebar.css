@@ -1,0 +1,57 @@
+.addfeedflex {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.companylogo {
+    width: 60px;
+    padding: 5px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.feedsidebar {
+    background-color: #fff;
+    border-radius: 15px;
+    border: 1px solid #d2d2d2;
+    width: 100%;
+}
+
+.feedsidebar p {
+    margin-bottom: 0;
+}
+
+.follow {
+    background-color: transparent;
+    margin: 0 auto;
+    border: 1px solid #bfbfbf;
+    border-radius: 20px;
+    width: 7rem;
+    height: 2rem;
+    color: #8e8e8e;
+    padding: 3px;
+}
+
+.follow:hover {
+    background-color: #dadada;
+    border: 2px solid #8e8e8e;
+    color: #8e8e8e;
+    padding: 3px;
+}
+
+.feedsidebar h4 {
+    font-size: 1.1rem;
+    padding: 5px;
+    text-align: center;
+}
+
+
+.leftbanner {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    display: none;
+    
+}

@@ -1,0 +1,129 @@
+.post .post-author {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.post {
+    position: relative;
+}
+
+.post .post-author img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.post .post-author > div:first-child {
+    margin-right: 1em;
+}
+
+.post .post-author .name {
+    display: block;
+    margin-bottom: -0.5em;
+}
+
+.post .post-author .date {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.post-buttons {
+    display: flex;
+    width: 100%;
+
+    justify-content: space-around;
+    background-color: white;
+    border-radius: 0 0 0.75em 0.75em;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1em;
+    padding: 0.25em;
+}
+
+.post-buttons > div {
+    cursor: pointer;
+    padding: 0.5em;
+    border-radius: 0.25em;
+}
+
+.post-buttons svg {
+    margin-right: 0.5em;
+}
+
+.post-buttons > div:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.activity {
+    position: relative;
+}
+.editPost {
+    position: absolute;
+    right: 2.5em;
+    top: 1em;
+    cursor: pointer;
+}
+.deletePost {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    cursor: pointer;
+}
+
+.post,
+.start-a-post {
+    padding-left: 1em !important;
+    padding-right: 1em !important;
+}
+
+.start-a-post > div {
+    display: flex;
+}
+
+.start-a-post img:first-child {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 0.5em;
+}
+
+.start-a-post img.upload {
+    width: 100%;
+    height: 10em;
+    object-fit: cover;
+}
+
+.start-a-post input[type="text"] {
+    border-radius: 2.5em;
+    width: 100%;
+    padding-left: 1em;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.start-a-post .btn:not(.uploadbtn) {
+    margin-left: 0.5em;
+    border-radius: 2.5em;
+}
+.start-a-post input:focus,
+.start-a-post input:active,
+.start-a-post input:focus-visible {
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    outline: 0;
+}
+.addfeedflex2 {
+    display: flex;
+}
+.post-image {
+    width: 100%;
+    height: 20em;
+}
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.deleting {
+    filter: grayscale(1) blur(1px);
+}
+
+.deleting .name:before {
+    content: "DELETING POST > ";
+}

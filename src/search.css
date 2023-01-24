@@ -1,0 +1,33 @@
+.searchcontainer {
+    background-color: #fff;
+    width: 80vw;
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #d7d7d7;
+}
+
+.searchcontainer p {
+    margin-bottom: 0;
+}
+
+.userpfp {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%
+}
+
+.searchflex {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+.searchflex2 {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+}
+
+.searchcontainer h4 {
+    padding: 10px;
+}
