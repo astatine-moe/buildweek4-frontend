@@ -10,6 +10,16 @@ const Login = (props) => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const [sUsername, setsUsername] = useState("");
+    const [sPassword, setsPassword] = useState("");
+    const [sEmail, setsEmail] = useState("");
+    const [sFirstname, setsFirstname] = useState("");
+    const [sSurname, setsSurname] = useState("");
+    const [sJob, setsJob] = useState("");
+    const [sLocation, setsLocation] = useState("");
+    const [sAbout, setsAbout] = useState("");
+
     const dispatch = useDispatch();
 
     const [error, setError] = useState("");
@@ -36,6 +46,32 @@ const Login = (props) => {
             })
             .catch((data) => {
                 setError("Invalid username or password");
+            });
+    };
+
+    const runSignup = () => {
+        request
+            .post(request.getURL() + "/auth/signup", {
+                username: sUsername,
+                password: sPassword,
+                email: sEmail,
+                name: sFirstname,
+                surname: sSurname,
+                title: sJob,
+                bio: sAbout,
+                area: sLocation,
+            })
+            .then((user) => {
+                dispatch({
+                    type: "SET_USER",
+                    payload: user,
+                });
+
+                cookies.set("user", user._id);
+                props.setIsLoggedIn(true);
+            })
+            .catch((data) => {
+                setError(`${data.statusText}`);
             });
     };
 
@@ -66,7 +102,137 @@ const Login = (props) => {
                 </li>
             </ul>
             <hr />
-            {signup && <></>}
+            {signup && (
+                <>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            runSignup();
+                        }}
+                    >
+                        <div className="row">
+                            <div className="col">
+                                <label className="form-label">Username</label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="Username"
+                                    class="form-control"
+                                    value={sUsername}
+                                    onChange={(e) => {
+                                        setsUsername(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="col">
+                                <label className="form-label">Password</label>
+                                <input
+                                    required
+                                    type="password"
+                                    placeholder="Password"
+                                    class="form-control"
+                                    value={sPassword}
+                                    onChange={(e) => {
+                                        setsPassword(e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col">
+                                <label className="form-label">
+                                    Email address
+                                </label>
+                                <input
+                                    required
+                                    type="email"
+                                    placeholder="Email"
+                                    class="form-control"
+                                    value={sEmail}
+                                    onChange={(e) => {
+                                        setsEmail(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="col">
+                                <label className="form-label">
+                                    Town, Region, Country
+                                </label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="Town, Region, Country"
+                                    class="form-control"
+                                    value={sLocation}
+                                    onChange={(e) => {
+                                        setsLocation(e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col">
+                                <label className="form-label">Name</label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="Name"
+                                    class="form-control"
+                                    value={sFirstname}
+                                    onChange={(e) => {
+                                        setsFirstname(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="col">
+                                <label className="form-label">Surname</label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="Surname"
+                                    class="form-control"
+                                    value={sSurname}
+                                    onChange={(e) => {
+                                        setsSurname(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="col">
+                                <label className="form-label">Job title</label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder="Job title"
+                                    class="form-control"
+                                    value={sJob}
+                                    onChange={(e) => {
+                                        setsJob(e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col">
+                                <label className="form-label">About</label>
+                                <textarea
+                                    required
+                                    className="form-control"
+                                    placeholder="About you..."
+                                    value={sAbout}
+                                    onChange={(e) => {
+                                        setsAbout(e.target.value);
+                                    }}
+                                ></textarea>
+                            </div>
+                        </div>
+                        <hr />
+                        <button className="btn btn-primary">Sign up</button>
+                    </form>
+                </>
+            )}
 
             {!signup && (
                 <>
