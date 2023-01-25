@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { doFetch, timeSince } from "../util";
 
 import {
     BiLike,
@@ -21,11 +20,13 @@ import {
     Form,
     Spinner,
 } from "react-bootstrap";
-import { opts } from "../Morgan";
-import "../Profile.css";
-import "../Feed.css";
+import "../css/Profile.css";
+import "../css/Feed.css";
 import FeedSidebar from "./FeedSidebar";
 import LeftSidebar from "./LeftSidebar";
+
+import request from "../Utility/fetch";
+const opts = {};
 
 export default function FeedPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -57,28 +58,35 @@ export default function FeedPage() {
 
     const fetchPosts = async () => {
         setIsLoading(true);
-        const { status, data } = await doFetch(
-            "https://striveschool-api.herokuapp.com/api/posts",
-            opts,
+        request
+            .get(request.getURL() + "/posts")
+            .then((data) => {
+                const p = data.posts.reverse().slice(0, 100);
+                setError("");
+                setIsLoading(false);
+                setPosts(p);
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Error fetching posts");
+                setIsLoading(false);
+            });
 
-            true
-        );
-
-        if (status === "ok") {
-            setError("");
-            setIsLoading(false);
-            setPosts(data.reverse());
-        } else {
-            console.error(data);
-            setError("Error fetching posts");
-            setIsLoading(false);
-        }
+        // if (status === "ok") {
+        //     setError("");
+        //     setIsLoading(false);
+        //     setPosts(data.reverse());
+        // } else {
+        //     console.error(data);
+        //     setError("Error fetching posts");
+        //     setIsLoading(false);
+        // }
     };
 
     const sendPost = async () => {
         setIsUploading(true);
 
-        const { status, data } = await doFetch(
+        const { status, data } = await request.get(
             "https://striveschool-api.herokuapp.com/api/posts",
             {
                 headers: {
@@ -115,7 +123,7 @@ export default function FeedPage() {
         console.log("post with image 2");
         setIsUploading(true);
 
-        const { status, data } = await doFetch(
+        const { status, data } = await request.get(
             "https://striveschool-api.herokuapp.com/api/posts",
             {
                 headers: {
@@ -140,7 +148,7 @@ export default function FeedPage() {
             const formData = new FormData();
             formData.append("post", postImage);
 
-            const { status: status2, data: data2 } = await doFetch(
+            const { status: status2, data: data2 } = await request.get(
                 "https://striveschool-api.herokuapp.com/api/posts/" + _id,
                 {
                     headers: {
@@ -176,7 +184,7 @@ export default function FeedPage() {
     const deletePost = async (id) => {
         setDeletingPost(id);
 
-        const { status, data } = await doFetch(
+        const { status, data } = await request.get(
             "https://striveschool-api.herokuapp.com/api/posts/" + id,
             { ...opts, method: "delete" },
             false
@@ -201,7 +209,7 @@ export default function FeedPage() {
         handleClose();
         setIsUploading(true);
 
-        const { status, data } = await doFetch(
+        const { status, data } = await request.get(
             `https://striveschool-api.herokuapp.com/api/posts/${editingPost}`,
             {
                 headers: {
@@ -370,16 +378,18 @@ export default function FeedPage() {
                     {isLoading && <Spinner />}
                     {!isLoading &&
                         !error &&
-                        posts.slice(0, 25).map((post) => (
-                            <>
-                                <div
-                                    className={`profile-section post activity ${
-                                        deletingPost === post._id
-                                            ? " deleting"
-                                            : ""
-                                    }`}
-                                >
-                                    {localUser._id === post.user._id ? (
+                        posts.slice(0, 25).map(
+                            (post) =>
+                                post.user && (
+                                    <>
+                                        <div
+                                            className={`profile-section post activity ${
+                                                deletingPost === post._id
+                                                    ? " deleting"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {/* {localUser._id === post.user._id ? (
                                         <BiPencil
                                             className="editPost"
                                             onClick={(e) => {
@@ -401,68 +411,80 @@ export default function FeedPage() {
                                         />
                                     ) : (
                                         <></>
-                                    )}
-                                    <div className="post-author">
-                                        <div>
-                                            <img src={post.user.image} />
+                                    )} */}
+                                            <div className="post-author">
+                                                <div>
+                                                    <img
+                                                        src={
+                                                            post.user.image
+                                                                ? post.user
+                                                                      .image
+                                                                : "https://via.placeholder.com/200x200"
+                                                        }
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <span className="name">
+                                                        {post.user.name}{" "}
+                                                        {post.user.surname}
+                                                    </span>
+                                                    <span className="date">
+                                                        {request.timeSince(
+                                                            new Date(
+                                                                post.createdAt
+                                                            )
+                                                        )}{" "}
+                                                        {post.createdAt !==
+                                                            post.updatedAt && (
+                                                            <>
+                                                                <span>
+                                                                    {" "}
+                                                                    - edited{" "}
+                                                                    {request.timeSince(
+                                                                        new Date(
+                                                                            post.updatedAt
+                                                                        )
+                                                                    )}{" "}
+                                                                    ago
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="post-text">
+                                                {post.text}
+                                            </div>
+                                            {post.image ? (
+                                                <div className="post-image">
+                                                    <hr />
+                                                    <img src={post.image} />
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
                                         </div>
-                                        <div>
-                                            <span className="name">
-                                                {post.user.name}{" "}
-                                                {post.user.surname}
-                                            </span>
-                                            <span className="date">
-                                                {timeSince(
-                                                    new Date(post.createdAt)
-                                                )}{" "}
-                                                {post.createdAt !==
-                                                    post.updatedAt && (
-                                                    <>
-                                                        <span>
-                                                            {" "}
-                                                            - edited{" "}
-                                                            {timeSince(
-                                                                new Date(
-                                                                    post.updatedAt
-                                                                )
-                                                            )}{" "}
-                                                            ago
-                                                        </span>
-                                                    </>
-                                                )}
-                                            </span>
+                                        <div className="post-buttons">
+                                            <div>
+                                                <BiLike size={20} />
+                                                Like
+                                            </div>
+                                            <div>
+                                                <BiCommentDetail size={20} />
+                                                Comment
+                                            </div>
+                                            <div>
+                                                <BiRepost size={20} />
+                                                Repost
+                                            </div>
+                                            <div>
+                                                <BiSend size={20} />
+                                                Send
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="post-text">{post.text}</div>
-                                    {post.image ? (
-                                        <div className="post-image">
-                                            <hr />
-                                            <img src={post.image} />
-                                        </div>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </div>
-                                <div className="post-buttons">
-                                    <div>
-                                        <BiLike size={20} />
-                                        Like
-                                    </div>
-                                    <div>
-                                        <BiCommentDetail size={20} />
-                                        Comment
-                                    </div>
-                                    <div>
-                                        <BiRepost size={20} />
-                                        Repost
-                                    </div>
-                                    <div>
-                                        <BiSend size={20} />
-                                        Send
-                                    </div>
-                                </div>
-                            </>
-                        ))}
+                                    </>
+                                )
+                        )}
                 </Col>
                 <Col md={3}>
                     <FeedSidebar />

@@ -1,16 +1,15 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfilePage from "./components/ProfilePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
 import MyNavbar from "./components/Navbar";
-import "./navbar.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchPage from "./components/SearchPage";
 import FeedPage from "./components/FeedPage";
-import "./search.css"
-import "./feedsidebar.css";
-import "./leftsidebar.css";
+import "./css/navbar.css";
+import "./css/search.css";
+import "./css/feedsidebar.css";
+import "./css/leftsidebar.css";
 
 function App() {
     const users = useSelector((state) => state.users);

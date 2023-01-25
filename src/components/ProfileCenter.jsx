@@ -1,7 +1,6 @@
-import { opts, uri } from "../Morgan";
 import { useEffect, useState } from "react";
 import banner from "../banner.png";
-import "../Profile.css";
+import "../css/Profile.css";
 import { BiPencil, BiSearch } from "react-icons/bi";
 import {
     BsFillPeopleFill,
@@ -14,7 +13,11 @@ import { Row, Col, Modal, Button, Form, Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { doFetch } from "../util";
+
+import request from "../Utility/fetch";
+
+const uri = request.getURL();
+const opts = {};
 
 const ProfileCenter = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +50,7 @@ const ProfileCenter = (props) => {
         setIsLoading(true);
         setError("");
         try {
-            const response = await fetch(link, opts);
+            const response = await request.get(link);
 
             if (response.ok) {
                 setError("");
@@ -115,7 +118,7 @@ const ProfileCenter = (props) => {
         const formData = new FormData();
         formData.append("profile", image);
 
-        const { data, status } = await doFetch(
+        const { data, status } = await request.get(
             `https://striveschool-api.herokuapp.com/api/profile/${localUser._id}/picture`,
             {
                 ...opts,
