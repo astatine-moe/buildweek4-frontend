@@ -1,7 +1,7 @@
 import ProfileCenter from "./ProfileCenter";
 import { Row, Col, Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "./sidebar/SideBar";
 
 const ProfilePage = (props) => {
   const { user_id } = useParams();
