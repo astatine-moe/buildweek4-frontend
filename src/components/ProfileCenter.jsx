@@ -96,23 +96,29 @@ const ProfileCenter = (props) => {
         handleClose2();
 
         const formData = new FormData();
-        formData.append("profile", image);
+        formData.append("image", image);
 
-        const { data, status } = await request.get(
-            `https://striveschool-api.herokuapp.com/api/profile/${localUser._id}/picture`,
+        // request.post(
+        //     request.getURL() + "/users/" + localUser._id + "/picture",
+        //     formData
+        // );
+
+        const response = await fetch(
+            request.getURL() + "/users/" + localUser._id + "/picture",
             {
-                ...opts,
                 method: "POST",
                 body: formData,
-            },
-            true
+            }
         );
 
-        fetchProfile(localUser._id);
-        dispatch({
-            type: "SET_USER",
-            payload: data,
-        });
+        if (response.ok) {
+            let data = await response.json();
+            fetchProfile(localUser._id);
+            dispatch({
+                type: "SET_USER",
+                payload: data,
+            });
+        }
     };
 
     useEffect(() => {
@@ -405,8 +411,6 @@ const ProfileCenter = (props) => {
             )}
 
             {error && <pre>{error}</pre>}
-
-            {localUser && <pre>{JSON.stringify(localUser, null, 4)}</pre>}
         </>
     );
 };
