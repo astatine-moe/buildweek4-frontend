@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProfilePage from "./components/ProfilePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MyNavbar from "./components/Navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchPage from "./components/SearchPage";
 import FeedPage from "./components/FeedPage";
@@ -11,51 +11,76 @@ import "./css/search.css";
 import "./css/feedsidebar.css";
 import "./css/leftsidebar.css";
 import { Container } from "react-bootstrap";
-
-let isLoggedIn = false;
+import Login from "./components/Login";
+import Cookies from "universal-cookie";
+import request from "./Utility/fetch";
+const cookies = new Cookies();
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const users = useSelector((state) => state.users);
     const dispatch = useDispatch();
+
+    const logout = () => {
+        cookies.remove("user");
+        setIsLoggedIn(false);
+    };
     useEffect(async () => {
-        const response = await fetch(
-            "https://striveschool-api.herokuapp.com/api/profile/",
-            {
-                headers: {
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
-                },
-            }
-        );
-        if (response.ok) {
-            const data = await response.json();
-            dispatch({
-                type: "ADD_USERS",
-                payload: data,
-            });
+        const uid = cookies.get("user");
+
+        if (!uid) return setIsLoggedIn(false);
+
+        if (uid) {
+            setIsLoggedIn(true);
+
+            request
+                .get(request.getURL() + "/users/" + uid)
+                .then((user) => {
+                    dispatch({
+                        type: "SET_USER",
+                        payload: user,
+                    });
+                })
+                .catch(console.error);
         }
 
-        const localResponse = await fetch(
-            "https://striveschool-api.herokuapp.com/api/profile/me",
-            {
-                headers: {
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
-                },
-            }
-        );
-
-        if (response.ok) {
-            const data = await localResponse.json();
-            dispatch({
-                type: "SET_USER",
-                payload: data,
-            });
-        }
+        // const response = await fetch(
+        //     "https://striveschool-api.herokuapp.com/api/profile/",
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
+        //         },
+        //     }
+        // );
+        // if (response.ok) {
+        //     const data = await response.json();
+        //     dispatch({
+        //         type: "ADD_USERS",
+        //         payload: data,
+        //     });
+        // }
+        // const localResponse = await fetch(
+        //     "https://striveschool-api.herokuapp.com/api/profile/me",
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
+        //         },
+        //     }
+        // );
+        // if (response.ok) {
+        //     const data = await localResponse.json();
+        //     dispatch({
+        //         type: "SET_USER",
+        //         payload: data,
+        //     });
+        // }
     }, []);
     return (
         <>
             {isLoggedIn && (
                 <BrowserRouter>
-                    <MyNavbar />
+                    <MyNavbar logout={logout} />
                     <Routes>
                         <Route path="/" element={<FeedPage />} />
                         <Route path="/in/:user_id" element={<ProfilePage />} />
@@ -67,13 +92,7 @@ function App() {
                 </BrowserRouter>
             )}
 
-            {!isLoggedIn && (
-                <>
-                    <Container>
-                        <h1>Welcome to your professional community</h1>
-                    </Container>
-                </>
-            )}
+            {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
         </>
     );
 }

@@ -8,15 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
-function MyNavbar() {
+function MyNavbar(props) {
     let navigate = useNavigate();
     const [search, setSearch] = useState("");
     const localUser = useSelector((state) => state.activeUser);
     return (
         <Navbar className="navflex" bg="light" expand="lg">
             <Container fluid>
-                
                 <Navbar.Brand href="#">
                     <img
                         className="logo"
@@ -57,7 +58,7 @@ function MyNavbar() {
                                 aria-label="Search"
                             />
                         </Form>
-                        
+
                         <Nav.Link
                             className="naviconflex first__navicon"
                             href="#action2"
@@ -174,7 +175,10 @@ function MyNavbar() {
                                     Job Posting Account
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action8">
+                                <NavDropdown.Item
+                                    href="#action8"
+                                    onClick={props.logout}
+                                >
                                     Sign out
                                 </NavDropdown.Item>
                             </NavDropdown>
