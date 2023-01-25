@@ -15,6 +15,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import request from "../Utility/fetch";
+import { Link } from "react-router-dom";
 
 const uri = request.getURL();
 const opts = {};
