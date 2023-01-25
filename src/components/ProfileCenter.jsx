@@ -46,37 +46,54 @@ const ProfileCenter = (props) => {
         if (id === "me") {
             me = true;
         }
-        let link = me ? `${uri}me` : `${uri}${id}`;
+        let link = me ? `${uri}/users/${localUser._id}` : `${uri}/users/${id}`;
         setIsLoading(true);
         setError("");
-        try {
-            const response = await request.get(link);
-
-            if (response.ok) {
+        request
+            .get(link)
+            .then((user) => {
                 setError("");
                 setIsLoading(false);
-                const data = await response.json();
-
-                const response2 = await fetch(uri + "me", opts);
-                if (response.ok) {
-                    const data2 = await response2.json();
-                    setProfile(data);
-                    setUpdateProfile(data);
-                    if (data._id === data2._id) {
-                        setIsMyProfile(true);
-                    } else {
-                        setIsMyProfile(false);
-                    }
+                setProfile(user);
+                setUpdateProfile(user);
+                if (user._id === localUser._id) {
+                    setIsMyProfile(true);
+                } else {
+                    setIsMyProfile(false);
                 }
-            } else {
+            })
+            .catch((err) => {
                 setError("Error fetching profile");
                 setIsLoading(false);
-            }
-        } catch (e) {
-            console.log(e);
-            setError("Error fetching profile");
-            setIsLoading(false);
-        }
+            });
+        // try {
+        //     const response = await request.get(link);
+
+        //     if (response.ok) {
+        //         setError("");
+        //         setIsLoading(false);
+        //         const data = await response.json();
+
+        //         const response2 = await fetch(uri + "me", opts);
+        //         if (response.ok) {
+        //             const data2 = await response2.json();
+        //             setProfile(data);
+        //             setUpdateProfile(data);
+        //             if (data._id === data2._id) {
+        //                 setIsMyProfile(true);
+        //             } else {
+        //                 setIsMyProfile(false);
+        //             }
+        //         }
+        //     } else {
+        //         setError("Error fetching profile");
+        //         setIsLoading(false);
+        //     }
+        // } catch (e) {
+        //     console.log(e);
+        //     setError("Error fetching profile");
+        //     setIsLoading(false);
+        // }
     };
 
     const onChangeHandler = (e) => {
