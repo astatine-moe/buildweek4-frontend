@@ -49,7 +49,7 @@ const getURL = () => {
     }
 };
 
-module.exports = {
+export default request = {
     getURL,
     timeSince,
     get: (url) => {

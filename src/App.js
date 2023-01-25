@@ -10,6 +10,9 @@ import "./css/navbar.css";
 import "./css/search.css";
 import "./css/feedsidebar.css";
 import "./css/leftsidebar.css";
+import { Container } from "react-bootstrap";
+
+let isLoggedIn = false;
 
 function App() {
     const users = useSelector((state) => state.users);
@@ -49,14 +52,29 @@ function App() {
         }
     }, []);
     return (
-        <BrowserRouter>
-            <MyNavbar />
-            <Routes>
-                <Route path="/" element={<FeedPage />} />
-                <Route path="/in/:user_id" element={<ProfilePage />} />
-                <Route path="/search/:search" element={<SearchPage />} />
-            </Routes>
-        </BrowserRouter>
+        <>
+            {isLoggedIn && (
+                <BrowserRouter>
+                    <MyNavbar />
+                    <Routes>
+                        <Route path="/" element={<FeedPage />} />
+                        <Route path="/in/:user_id" element={<ProfilePage />} />
+                        <Route
+                            path="/search/:search"
+                            element={<SearchPage />}
+                        />
+                    </Routes>
+                </BrowserRouter>
+            )}
+
+            {!isLoggedIn && (
+                <>
+                    <Container>
+                        <h1>Welcome to your professional community</h1>
+                    </Container>
+                </>
+            )}
+        </>
     );
 }
 
