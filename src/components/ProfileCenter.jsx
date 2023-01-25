@@ -56,6 +56,7 @@ const ProfileCenter = (props) => {
                 setIsLoading(false);
                 setProfile(user);
                 setUpdateProfile(user);
+                console.log(user, localUser);
                 if (user._id === localUser._id) {
                     setIsMyProfile(true);
                 } else {
@@ -75,30 +76,20 @@ const ProfileCenter = (props) => {
             ...updateProfile,
             [id]: value,
         });
-        console.log(updateProfile);
     };
 
     const handleSave = async () => {
         handleClose();
         setProfile(updateProfile);
-        try {
-            const response = await fetch(uri, {
-                headers: {
-                    ...opts.headers,
-                    "Content-Type": "application/json",
-                },
-                method: "PUT",
-                body: JSON.stringify(updateProfile),
-            });
-            if (response.ok) {
-                const data = await response.json();
-
+        request
+            .put(request.getURL() + "/users/" + profile._id, updateProfile)
+            .then((user) => {
                 dispatch({
                     type: "SET_USER",
-                    payload: data,
+                    payload: user,
                 });
-            }
-        } catch (e) {}
+            })
+            .catch((err) => {});
     };
 
     const handleSave2 = async () => {
@@ -414,6 +405,8 @@ const ProfileCenter = (props) => {
             )}
 
             {error && <pre>{error}</pre>}
+
+            {localUser && <pre>{JSON.stringify(localUser, null, 4)}</pre>}
         </>
     );
 };
