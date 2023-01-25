@@ -49,7 +49,7 @@ const getURL = () => {
     }
 };
 
-export default request = {
+export default {
     getURL,
     timeSince,
     get: (url) => {
