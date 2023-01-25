@@ -66,34 +66,6 @@ const ProfileCenter = (props) => {
                 setError("Error fetching profile");
                 setIsLoading(false);
             });
-        // try {
-        //     const response = await request.get(link);
-
-        //     if (response.ok) {
-        //         setError("");
-        //         setIsLoading(false);
-        //         const data = await response.json();
-
-        //         const response2 = await fetch(uri + "me", opts);
-        //         if (response.ok) {
-        //             const data2 = await response2.json();
-        //             setProfile(data);
-        //             setUpdateProfile(data);
-        //             if (data._id === data2._id) {
-        //                 setIsMyProfile(true);
-        //             } else {
-        //                 setIsMyProfile(false);
-        //             }
-        //         }
-        //     } else {
-        //         setError("Error fetching profile");
-        //         setIsLoading(false);
-        //     }
-        // } catch (e) {
-        //     console.log(e);
-        //     setError("Error fetching profile");
-        //     setIsLoading(false);
-        // }
     };
 
     const onChangeHandler = (e) => {
