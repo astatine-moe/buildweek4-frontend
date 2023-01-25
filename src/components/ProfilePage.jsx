@@ -10,6 +10,11 @@ const ProfilePage = (props) => {
       `https://backend-w4-build-weeklinkedin-production.up.railway.app/users/${user_id}/pdf`
     );
   };
+  const up = () => {
+    window.location.replace(
+      `https://backend-w4-build-weeklinkedin-production.up.railway.app/users/${user_id}/experiences/csv`
+    );
+  };
   return (
     <Container>
       <Row>
@@ -28,7 +33,9 @@ const ProfilePage = (props) => {
           <Button className="bg-dark border-none" onClick={down}>
             PDF
           </Button>
-          <Button className="ml-3 bg-dark">CSV</Button>
+          <Button onClick={up} className="ml-3 bg-dark">
+            CSV
+          </Button>
         </Col>
       </Row>
     </Container>
