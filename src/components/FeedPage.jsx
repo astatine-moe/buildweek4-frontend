@@ -20,6 +20,7 @@ import {
   Button,
   Form,
   Spinner,
+  Collapse,
 } from "react-bootstrap";
 import "../css/Profile.css";
 import "../css/Feed.css";
@@ -452,12 +453,14 @@ export default function FeedPage() {
                         Send
                       </div>
                     </div>
-                    <div>
-                      {posts[0]?.comments &&
-                        posts[0]?.comments.map((comment, index) => (
-                          <CommentComp key={index} comment={comment} />
-                        ))}
-                    </div>
+                    <Collapse>
+                      <div>
+                        {posts[0]?.comments &&
+                          posts[0]?.comments.map((comment, index) => (
+                            <CommentComp key={index} comment={comment} />
+                          ))}
+                      </div>
+                    </Collapse>
                   </>
                 )
             )}
