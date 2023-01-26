@@ -453,8 +453,10 @@ export default function FeedPage() {
                       </div>
                     </div>
                     <div>
-                      {posts.comments &&
-                        posts.comments.map((comment, index) => <h1>test</h1>)}
+                      {posts[0]?.comments &&
+                        posts[0]?.comments.map((comment, index) => (
+                          <CommentComp key={index} comment={comment} />
+                        ))}
                     </div>
                   </>
                 )
