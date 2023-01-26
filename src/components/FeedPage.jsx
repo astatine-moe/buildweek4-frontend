@@ -10,6 +10,7 @@ import {
   BiPencil,
   BiTrash,
 } from "react-icons/bi";
+import CommentComp from "./CommentComp";
 import { BsX } from "react-icons/bs";
 import {
   Row,
@@ -19,6 +20,7 @@ import {
   Button,
   Form,
   Spinner,
+  Collapse,
 } from "react-bootstrap";
 import "../css/Profile.css";
 import "../css/Feed.css";
@@ -55,7 +57,7 @@ export default function FeedPage() {
     setPostImage(null);
     setPostImageUrl("");
   };
-
+  console.log(posts[0]?.comments);
   const fetchPosts = async () => {
     setIsLoading(true);
     request
@@ -451,6 +453,14 @@ export default function FeedPage() {
                         Send
                       </div>
                     </div>
+                    <Collapse>
+                      <div>
+                        {posts[0]?.comments &&
+                          posts[0]?.comments.map((comment, index) => (
+                            <CommentComp key={index} comment={comment} />
+                          ))}
+                      </div>
+                    </Collapse>
                   </>
                 )
             )}
