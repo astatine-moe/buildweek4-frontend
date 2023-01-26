@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import request from "../Utility/fetch";
 import Cookies from "universal-cookie";
+import LoginNav from "./LoginNav";
+
+import "../css/Login.css";
+
 const cookies = new Cookies();
 
 const Login = (props) => {
@@ -28,7 +32,7 @@ const Login = (props) => {
     request
       .post(request.getURL() + "/auth/login", {
         username,
-        password,
+        password
       })
       .then((uid) => {
         request
@@ -36,7 +40,7 @@ const Login = (props) => {
           .then((user) => {
             dispatch({
               type: "SET_USER",
-              payload: user,
+              payload: user
             });
 
             cookies.set("user", uid);
@@ -59,12 +63,12 @@ const Login = (props) => {
         surname: sSurname,
         title: sJob,
         bio: sAbout,
-        area: sLocation,
+        area: sLocation
       })
       .then((user) => {
         dispatch({
           type: "SET_USER",
-          payload: user,
+          payload: user
         });
 
         cookies.set("user", user._id);
@@ -76,202 +80,205 @@ const Login = (props) => {
   };
 
   return (
-    <Container>
-      <br />
-      {error && <div className="alert alert-danger">{error}</div>}
-      <ul className="nav nav-pills">
-        <li className="nav-item">
-          <a
-            className={`nav-link ${signup ? "" : " active"}`}
-            onClick={(e) => {
-              setSignup(false);
-            }}
-          >
-            Login
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={`nav-link ${signup ? " active" : ""}`}
-            onClick={(e) => {
-              setSignup(true);
-            }}
-          >
-            Signup
-          </a>
-        </li>
-      </ul>
-      <hr />
-      {signup && (
-        <>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              runSignup();
-            }}
-          >
-            <div className="row">
-              <div className="col">
-                <label className="form-label">Username</label>
+    <>
+      <LoginNav />
+      <Container className="login-div">
+        <br />
+        {error && <div className="alert alert-danger">{error}</div>}
+        <ul className="nav nav-pills">
+          <li className="nav-item">
+            <a
+              className={`nav-link ${signup ? "" : " active"}`}
+              onClick={(e) => {
+                setSignup(false);
+              }}
+            >
+              Login
+            </a>
+          </li>
+          <li className="nav-item">
+            <a
+              className={`nav-link ${signup ? " active" : ""}`}
+              onClick={(e) => {
+                setSignup(true);
+              }}
+            >
+              Signup
+            </a>
+          </li>
+        </ul>
+        <hr />
+        {signup && (
+          <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                runSignup();
+              }}
+            >
+              <div className="row">
+                <div className="col">
+                  <label className="form-label">Username</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Username"
+                    class="form-control"
+                    value={sUsername}
+                    onChange={(e) => {
+                      setsUsername(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <label className="form-label">Password</label>
+                  <input
+                    required
+                    type="password"
+                    placeholder="Password"
+                    class="form-control"
+                    value={sPassword}
+                    onChange={(e) => {
+                      setsPassword(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <br />
+              <div className="row">
+                <div className="col">
+                  <label className="form-label">Email address</label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="Email"
+                    class="form-control"
+                    value={sEmail}
+                    onChange={(e) => {
+                      setsEmail(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <label className="form-label">Town, Region, Country</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Town, Region, Country"
+                    class="form-control"
+                    value={sLocation}
+                    onChange={(e) => {
+                      setsLocation(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <br />
+              <div className="row">
+                <div className="col">
+                  <label className="form-label">Name</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Name"
+                    class="form-control"
+                    value={sFirstname}
+                    onChange={(e) => {
+                      setsFirstname(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <label className="form-label">Surname</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Surname"
+                    class="form-control"
+                    value={sSurname}
+                    onChange={(e) => {
+                      setsSurname(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <label className="form-label">Job title</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Job title"
+                    class="form-control"
+                    value={sJob}
+                    onChange={(e) => {
+                      setsJob(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <br />
+              <div className="row">
+                <div className="col">
+                  <label className="form-label">About</label>
+                  <textarea
+                    required
+                    className="form-control"
+                    placeholder="About you..."
+                    value={sAbout}
+                    onChange={(e) => {
+                      setsAbout(e.target.value);
+                    }}
+                  ></textarea>
+                </div>
+              </div>
+              <hr />
+              <button className="btn btn-primary">Sign up</button>
+            </form>
+          </>
+        )}
+
+        {!signup && (
+          <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                login();
+              }}
+            >
+              <div className="mb-3">
+                <label for="username" className="form-label">
+                  Username
+                </label>
                 <input
-                  required
                   type="text"
-                  placeholder="Username"
-                  class="form-control"
-                  value={sUsername}
-                  onChange={(e) => {
-                    setsUsername(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label className="form-label">Password</label>
-                <input
-                  required
-                  type="password"
-                  placeholder="Password"
-                  class="form-control"
-                  value={sPassword}
-                  onChange={(e) => {
-                    setsPassword(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <br />
-            <div className="row">
-              <div className="col">
-                <label className="form-label">Email address</label>
-                <input
-                  required
-                  type="email"
-                  placeholder="Email"
-                  class="form-control"
-                  value={sEmail}
-                  onChange={(e) => {
-                    setsEmail(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label className="form-label">Town, Region, Country</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Town, Region, Country"
-                  class="form-control"
-                  value={sLocation}
-                  onChange={(e) => {
-                    setsLocation(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <br />
-            <div className="row">
-              <div className="col">
-                <label className="form-label">Name</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Name"
-                  class="form-control"
-                  value={sFirstname}
-                  onChange={(e) => {
-                    setsFirstname(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label className="form-label">Surname</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Surname"
-                  class="form-control"
-                  value={sSurname}
-                  onChange={(e) => {
-                    setsSurname(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label className="form-label">Job title</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Job title"
-                  class="form-control"
-                  value={sJob}
-                  onChange={(e) => {
-                    setsJob(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <br />
-            <div className="row">
-              <div className="col">
-                <label className="form-label">About</label>
-                <textarea
-                  required
                   className="form-control"
-                  placeholder="About you..."
-                  value={sAbout}
+                  placeholder="Username"
+                  value={username}
                   onChange={(e) => {
-                    setsAbout(e.target.value);
+                    setUsername(e.target.value);
                   }}
-                ></textarea>
+                ></input>
               </div>
-            </div>
-            <hr />
-            <button className="btn btn-primary">Sign up</button>
-          </form>
-        </>
-      )}
+              <div className="mb-3">
+                <label for="username" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                ></input>
+              </div>
 
-      {!signup && (
-        <>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              login();
-            }}
-          >
-            <div className="mb-3">
-              <label for="username" className="form-label">
-                Username
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
-              ></input>
-            </div>
-            <div className="mb-3">
-              <label for="username" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              ></input>
-            </div>
-
-            <button className="btn btn-primary">Login</button>
-          </form>
-        </>
-      )}
-    </Container>
+              <button className="btn btn-primary">Login</button>
+            </form>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
