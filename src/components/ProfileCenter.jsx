@@ -7,7 +7,7 @@ import {
   BsFillEyeFill,
   BsArrowRight,
   BsImage,
-  BsX,
+  BsX
 } from "react-icons/bs";
 import { Row, Col, Modal, Button, Form, Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,6 +38,51 @@ const ProfileCenter = (props) => {
 
   const handleShow2 = () => setShow2(true);
   const handleClose2 = () => setShow2(false);
+  //-----------------Experience-----------------
+  // const [editExperience, setEditExperience] = useState({});
+  // const [showEditExperience, setShowEditExperience] = useState(false);
+
+  // const [showEditModal, setShowEditModal] = useState(false);
+  // const [showAddModal, setShowAddModal] = useState(false);
+  // const handleShowAddModal = () => setShowAddModal(true);
+  // const handleCloseAddModal = () => setShowAddModal(false);
+  // const handleShowEditModal = () => setShowEditModal(true);
+
+  // const handleCloseEditModal = () => setShowEditModal(false);
+  // const handleCancelEditExperience = () => {
+  //   setShowEditExperience(false);
+  // };
+
+  // const handleEditExperience = (experience) => {
+  //   setEditExperience(experience);
+  //   setShowEditExperience(true);
+  // };
+
+  // const handleSaveEditExperience = async () => {
+  //   setShowEditExperience(false);
+  //   try {
+  //     const response = await fetch(
+  //       `${uri}/users/${localUser._id}/experiences/${editExperience._id}`,
+  //       {
+  //         method: "PUT",
+  //         body: JSON.stringify(editExperience),
+  //         headers: { "Content-Type": "application/json" }
+  //       }
+  //     );
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       fetchProfile(localUser._id);
+  //       dispatch({
+  //         type: "SET_USER",
+  //         payload: data
+  //       });
+  //     }
+  //   } catch (error) {
+  //     setError("Error updating experience");
+  //   }
+  // };
+
+  //-----------------Experience-----------------
 
   const dispatch = useDispatch();
 
@@ -75,7 +120,7 @@ const ProfileCenter = (props) => {
     const value = e.target.value;
     setUpdateProfile({
       ...updateProfile,
-      [id]: value,
+      [id]: value
     });
   };
 
@@ -87,7 +132,7 @@ const ProfileCenter = (props) => {
       .then((user) => {
         dispatch({
           type: "SET_USER",
-          payload: user,
+          payload: user
         });
       })
       .catch((err) => {});
@@ -108,7 +153,7 @@ const ProfileCenter = (props) => {
       request.getURL() + "/users/" + localUser._id + "/picture",
       {
         method: "POST",
-        body: formData,
+        body: formData
       }
     );
 
@@ -117,7 +162,7 @@ const ProfileCenter = (props) => {
       fetchProfile(localUser._id);
       dispatch({
         type: "SET_USER",
-        payload: data,
+        payload: data
       });
     }
   };
@@ -233,6 +278,34 @@ const ProfileCenter = (props) => {
           </div>
           <div className="profile-section experience">
             <h5>Experience</h5>
+            {profile.experiences.map((experience, index) => (
+              <div key={index}>
+                <p>Role: {experience.role}</p>
+                <p>Company: {experience.company}</p>
+              </div>
+            ))}
+            {/* <Button onClick={() => setShowEditModal(true)}>
+              Edit Experience
+            </Button>
+            <Button onClick={() => setShowAddModal(true)}>
+              Add Experience
+            </Button>
+            {showEditModal ? (
+              <EditExperienceModal
+                show={showEditModal}
+                handleClose={handleCloseEditModal}
+                handleSave={handleSaveEditModal}
+              />
+            ) : null}
+
+            {showAddModal ? (
+              <AddExperienceModal
+                show={showAddModal}
+                handleClose={handleCloseAddModal}
+                handleSave={handleSaveAddModal}
+              />
+            ) : null} */}
+            <p>testdw</p>
           </div>
           <div className="profile-section education">
             <h5>Education</h5>
@@ -371,6 +444,53 @@ const ProfileCenter = (props) => {
       )}
 
       {error && <pre>{error}</pre>}
+
+      {/* {showEditExperience && (
+        <Modal show={showEditExperience} onHide={handleCancelEditExperience}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Experience</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="role">
+                <Form.Label>Role</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editExperience.role}
+                  onChange={(e) =>
+                    setEditExperience({
+                      ...editExperience,
+                      role: e.target.value
+                    })
+                  }
+                />
+              </Form.Group>
+              <Form.Group controlId="company">
+                <Form.Label>Company</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editExperience.company}
+                  onChange={(e) =>
+                    setEditExperience({
+                      ...editExperience,
+                      company: e.target.value
+                    })
+                  }
+                />
+              </Form.Group>
+              Add fields for other experience details here
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCancelEditExperience}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSaveEditExperience}>
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )} */}
     </>
   );
 };
