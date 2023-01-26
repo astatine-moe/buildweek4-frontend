@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import Cookies from "universal-cookie";
 import {
   BiLike,
   BiCommentDetail,
@@ -48,7 +48,7 @@ export default function FeedPage() {
   const handleShow = () => setShow(true);
 
   const localUser = useSelector((state) => state.activeUser);
-
+  const cookies = new Cookies();
   const clearForm = () => {
     setPost("");
     setPostType("text");
@@ -87,14 +87,9 @@ export default function FeedPage() {
     setIsUploading(true);
 
     request
-      .post(request.getURL() + "/post", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          text: post,
-        }),
+      .post(request.getURL() + "/posts", {
+        text: post,
+        user: cookies.get("user"),
       })
       .then((data) => {
         setPosts([
