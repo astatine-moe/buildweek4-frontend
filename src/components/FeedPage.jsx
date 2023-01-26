@@ -452,12 +452,6 @@ export default function FeedPage() {
                         Send
                       </div>
                     </div>
-                    <div>
-                      {post.comments &&
-                        post.comments.map((comment, index) => (
-                          <CommentComp key={index} comment={comment} />
-                        ))}
-                    </div>
                   </>
                 )
             )}
