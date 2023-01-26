@@ -10,6 +10,7 @@ import {
   BiPencil,
   BiTrash,
 } from "react-icons/bi";
+import CommentComp from "./CommentComp";
 import { BsX } from "react-icons/bs";
 import {
   Row,
@@ -450,6 +451,12 @@ export default function FeedPage() {
                         <BiSend size={20} />
                         Send
                       </div>
+                    </div>
+                    <div>
+                      {post.comments &&
+                        post.comments.map((comment, index) => (
+                          <CommentComp key={index} comment={comment} />
+                        ))}
                     </div>
                   </>
                 )
