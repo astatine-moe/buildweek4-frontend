@@ -56,7 +56,7 @@ export default function FeedPage() {
     setPostImage(null);
     setPostImageUrl("");
   };
-
+  console.log(posts[0]?.comments);
   const fetchPosts = async () => {
     setIsLoading(true);
     request
@@ -451,6 +451,10 @@ export default function FeedPage() {
                         <BiSend size={20} />
                         Send
                       </div>
+                    </div>
+                    <div>
+                      {posts.comments &&
+                        posts.comments.map((comment, index) => <h1>test</h1>)}
                     </div>
                   </>
                 )
