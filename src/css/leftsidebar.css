@@ -5,7 +5,6 @@
     width: 100%;
 }
 
-
 .connflex {
     display: flex;
     justify-content: space-between;
@@ -18,8 +17,19 @@
 
 .leftpfp {
     border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .leftsidetop {
     text-align: center;
+}
+
+.leftpfpdiv {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+    margin-bottom: 2em;
 }
