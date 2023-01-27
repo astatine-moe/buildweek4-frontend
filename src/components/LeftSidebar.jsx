@@ -11,16 +11,8 @@ export default function LeftSidebar() {
                 <div>
                     <img className="leftbanner" src={banner} alt="" />
                 </div>
-                <div>
-                    <img
-                        className="leftpfp"
-                        src={localUser?.image}
-                        alt=""
-                        style={{
-                            width: "100px",
-                            marginTop: "1em",
-                        }}
-                    />
+                <div className="leftpfpdiv">
+                    <img className="leftpfp" src={localUser?.image} alt="" />
                 </div>
                 <div>
                     <h4>Welcome, {localUser?.name}!</h4>
