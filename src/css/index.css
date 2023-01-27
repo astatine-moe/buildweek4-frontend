@@ -20,3 +20,16 @@ code {
 .navbar {
     margin-bottom: 2em;
 }
+
+.nav-icon-stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.nav-icon-stacked {
+    color: rgba(0, 0, 0, 0.6);
+}
+.nav-icon-stacked:hover {
+    color: black;
+}
