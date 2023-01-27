@@ -26,55 +26,42 @@ function App() {
         cookies.remove("user");
         setIsLoggedIn(false);
     };
-    useEffect(async () => {
+    async function fetchData() {
         const uid = cookies.get("user");
 
         if (!uid) return setIsLoggedIn(false);
 
         if (uid) {
             setIsLoggedIn(true);
-
-            request
-                .get(request.getURL() + "/users/" + uid)
-                .then((user) => {
-                    dispatch({
-                        type: "SET_USER",
-                        payload: user,
-                    });
-                })
-                .catch(console.error);
+            await new Promise((resolve) => {
+                request
+                    .get(request.getURL() + "/users/" + uid)
+                    .then((user) => {
+                        dispatch({
+                            type: "SET_USER",
+                            payload: user,
+                        });
+                        resolve();
+                    })
+                    .catch(resolve);
+            });
         }
 
-        // const response = await fetch(
-        //     "https://striveschool-api.herokuapp.com/api/profile/",
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
-        //         },
-        //     }
-        // );
-        // if (response.ok) {
-        //     const data = await response.json();
-        //     dispatch({
-        //         type: "ADD_USERS",
-        //         payload: data,
-        //     });
-        // }
-        // const localResponse = await fetch(
-        //     "https://striveschool-api.herokuapp.com/api/profile/me",
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk5OGQ4MTU0ZjRhYTAwMTUxOTMwMjgiLCJpYXQiOjE2NzEwMDc2MTcsImV4cCI6MTY3MjIxNzIxN30.cSe4CwoajKqBlSxhZ9jxQtYaay9FYkPy74H9lnKOxXI`,
-        //         },
-        //     }
-        // );
-        // if (response.ok) {
-        //     const data = await localResponse.json();
-        //     dispatch({
-        //         type: "SET_USER",
-        //         payload: data,
-        //     });
-        // }
+        await new Promise((resolve) => {
+            request
+                .get(request.getURL() + "/users")
+                .then((users) => {
+                    dispatch({
+                        type: "ADD_USERS",
+                        payload: users,
+                    });
+                    resolve();
+                })
+                .catch(resolve);
+        });
+    }
+    useEffect(async () => {
+        fetchData();
     }, []);
     return (
         <>
