@@ -18,6 +18,8 @@ import {
 } from "react-icons/bs";
 import { FaCommentDots, FaBell } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
+import request from "../Utility/fetch";
+import { useEffect } from "react";
 const cookies = new Cookies();
 
 function NavItem(props) {
@@ -33,10 +35,30 @@ function NavItem(props) {
     );
 }
 
+let t;
+
 function MyNavbar(props) {
     let navigate = useNavigate();
     const [search, setSearch] = useState("");
+    const [notifications, setNotifications] = useState([]);
     const localUser = useSelector((state) => state.activeUser);
+
+    const fetchNotifications = async () => {
+        request
+            .get(request.getURL() + "/users/" + localUser?._id)
+            .then((user) => {
+                setNotifications(user.requests);
+            })
+            .catch(console.error);
+    };
+
+    useEffect(() => {
+        fetchNotifications();
+        t = setInterval(function () {
+            fetchNotifications();
+        }, 1 * 10 * 1000);
+    }, []);
+
     return (
         <Navbar bg="light" collapseOnSelect expand="lg">
             <Container>
@@ -83,7 +105,9 @@ function MyNavbar(props) {
                                 <div className="nav-icon-stacked">
                                     <FaBell size={25} />
                                     Notifications
-                                    <span className="count">0</span>
+                                    <span className="count">
+                                        {notifications.length || 0}
+                                    </span>
                                 </div>
                             </Nav.Link>
                         </LinkContainer>

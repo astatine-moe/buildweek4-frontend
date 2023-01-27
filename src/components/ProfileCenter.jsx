@@ -26,6 +26,8 @@ const ProfileCenter = (props) => {
     const [profile, setProfile] = useState({});
     const [isMyProfile, setIsMyProfile] = useState(false);
     const [updateProfile, setUpdateProfile] = useState({});
+    const [hasSent, setHasSent] = useState(false);
+    const [isFriends, setIsFriends] = useState(false);
 
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
@@ -39,6 +41,9 @@ const ProfileCenter = (props) => {
     const handleShow2 = () => setShow2(true);
     const handleClose2 = () => setShow2(false);
 
+    const dispatch = useDispatch();
+
+    const localUser = useSelector((state) => state.activeUser);
     const down = () => {
         window.location.replace(
             `https://backend-w4-build-weeklinkedin-production.up.railway.app/users/${profile?._id}/pdf`
@@ -48,6 +53,27 @@ const ProfileCenter = (props) => {
         window.location.replace(
             `https://backend-w4-build-weeklinkedin-production.up.railway.app/users/${profile?._id}/experiences/csv`
         );
+    };
+
+    const addFriend = (id) => {
+        const myId = localUser._id;
+        const theirId = id;
+
+        request
+            .get(request.getURL() + `/users/${theirId}/request/${myId}`)
+            .then(({ message }) => {
+                setHasSent(true);
+            });
+    };
+    const removeFriend = (id) => {
+        const myId = localUser._id;
+        const theirId = id;
+        request
+            .get(request.getURL() + `/users/${theirId}/remove/${myId}`)
+            .then(({ message }) => {
+                setIsFriends(false);
+                setHasSent(false);
+            });
     };
 
     //-----------------Experience-----------------
@@ -96,10 +122,6 @@ const ProfileCenter = (props) => {
 
     //-----------------Experience-----------------
 
-    const dispatch = useDispatch();
-
-    const localUser = useSelector((state) => state.activeUser);
-
     const fetchProfile = async (id, me = false) => {
         if (id === "me") {
             me = true;
@@ -114,6 +136,18 @@ const ProfileCenter = (props) => {
                 setIsLoading(false);
                 setProfile(user);
                 setUpdateProfile(user);
+                const userRequest = user.requests.find(
+                    (u) => u._id === localUser._id
+                );
+                if (userRequest) {
+                    setHasSent(true);
+                }
+                const userFriend = user.friends.find(
+                    (u) => u._id === localUser._id
+                );
+                if (userFriend) {
+                    setIsFriends(true);
+                }
                 console.log(user, localUser);
                 if (user._id === localUser._id) {
                     setIsMyProfile(true);
@@ -235,8 +269,41 @@ const ProfileCenter = (props) => {
                             <h6>{profile.title}</h6>
                             <span className="location">{profile.area}</span>
                             <span className="connections">
-                                <b>0</b> connections
+                                <b>{profile?.friends?.length || 0}</b>{" "}
+                                connection
+                                {(profile?.friends?.length || 0) === 1
+                                    ? ""
+                                    : "s"}
                             </span>
+                            {!isMyProfile && (
+                                <>
+                                    <br />
+                                    {isFriends && (
+                                        <Button
+                                            variant="danger"
+                                            onClick={(e) => {
+                                                removeFriend(profile._id);
+                                            }}
+                                        >
+                                            Remove friend
+                                        </Button>
+                                    )}
+                                    {!isFriends && (
+                                        <Button
+                                            onClick={(e) => {
+                                                addFriend(profile._id);
+                                            }}
+                                            variant="success"
+                                            disabled={hasSent}
+                                        >
+                                            {hasSent
+                                                ? "Request sent"
+                                                : "Add friend"}
+                                        </Button>
+                                    )}
+                                    <br />
+                                </>
+                            )}
                             <br />
                             <Button onClick={down}> Download as PDF</Button>
                             {" - "}

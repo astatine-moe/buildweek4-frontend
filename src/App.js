@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchPage from "./components/SearchPage";
 import FeedPage from "./components/FeedPage";
+import NotificationPage from "./components/NotificationPage";
 import "./css/navbar.css";
 import "./css/search.css";
 import "./css/feedsidebar.css";
@@ -32,7 +33,6 @@ function App() {
         if (!uid) return setIsLoggedIn(false);
 
         if (uid) {
-            setIsLoggedIn(true);
             await new Promise((resolve) => {
                 request
                     .get(request.getURL() + "/users/" + uid)
@@ -41,6 +41,7 @@ function App() {
                             type: "SET_USER",
                             payload: user,
                         });
+                        setIsLoggedIn(true);
                         resolve();
                     })
                     .catch(resolve);
@@ -74,6 +75,10 @@ function App() {
                         <Route
                             path="/search/:search"
                             element={<SearchPage />}
+                        />
+                        <Route
+                            path="/notifications"
+                            element={<NotificationPage />}
                         />
                     </Routes>
                 </BrowserRouter>
