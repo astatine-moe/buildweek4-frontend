@@ -82,12 +82,12 @@ body {
     border-radius: 50%;
 }
 
-input.me-2.form-control {
+nav input.me-2.form-control {
     transition: 1s;
     border-radius: 5px;
 }
 
-input.me-2.form-control:focus {
+nav input.me-2.form-control:focus {
     width: 20vw;
 }
 .first__navicon {

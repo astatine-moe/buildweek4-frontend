@@ -38,18 +38,30 @@
     margin-bottom: 1em;
     padding: 0.25em;
 }
+.post-buttons-alt {
+    display: flex;
+    width: 100%;
 
-.post-buttons > div {
+    justify-content: space-around;
+    background-color: white;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    padding: 0.25em;
+}
+
+.post-buttons > div,
+.post-buttons-alt > div {
     cursor: pointer;
     padding: 0.5em;
     border-radius: 0.25em;
 }
 
-.post-buttons svg {
+.post-buttons svg,
+.post-buttons-alt svg {
     margin-right: 0.5em;
 }
 
-.post-buttons > div:hover {
+.post-buttons > div:hover,
+.post-buttons-alt > div:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 .activity {
@@ -126,4 +138,110 @@
 
 .deleting .name:before {
     content: "DELETING POST > ";
+}
+
+.post-stats {
+    display: flex;
+    width: 100%;
+
+    justify-content: space-between;
+    background-color: white;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    padding: 0.25em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.post-stats * {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.comment-box {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    background-color: white;
+    border-radius: 0 0 0.75em 0.75em;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1em;
+    padding: 0.25em;
+}
+
+.comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.comment:last-child {
+    border-bottom: 0;
+}
+.comment .img-contain {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 1em;
+}
+.comment .img-contain img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user2 {
+    display: flex;
+    align-items: center;
+}
+.personname span:first-child {
+    font-weight: 500;
+    color: black;
+}
+.personname span:last-child {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.addComment {
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    background-color: white;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    padding: 0.25em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.addComment div:first-child {
+    width: 48px;
+    height: 48px;
+
+    margin-right: 0.5em;
+    border-radius: 50%;
+}
+.addComment div:first-child img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.addComment div:last-child {
+    flex: auto;
+}
+
+.addComment input {
+    border-radius: 25px !important;
+    margin: 0;
+}
+
+.timeago {
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 0.8em;
+}
+
+.liked {
+    color: blue;
 }

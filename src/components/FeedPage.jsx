@@ -4,12 +4,14 @@ import { useSelector } from "react-redux";
 import Cookies from "universal-cookie";
 import {
     BiLike,
+    BiLikeFill,
     BiCommentDetail,
     BiRepost,
     BiSend,
     BiPencil,
     BiTrash,
 } from "react-icons/bi";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import CommentComp from "./CommentComp";
 import { BsX } from "react-icons/bs";
 import {
@@ -35,6 +37,7 @@ export default function FeedPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState("");
+    const [likes, setLikes] = useState([]);
 
     const [postType, setPostType] = useState("text");
     const [postImage, setPostImage] = useState(null);
@@ -46,6 +49,9 @@ export default function FeedPage() {
     const [show, setShow] = useState(false);
     const [updatePost, setUpdatePost] = useState({});
     const [editingPost, setEditingPost] = useState("");
+
+    const [commentBox, setCommentBox] = useState("");
+    const [commentText, setCommentText] = useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -67,6 +73,11 @@ export default function FeedPage() {
                 const p = data.posts.reverse().slice(0, 100);
                 setError("");
                 setIsLoading(false);
+                for (const ost of p) {
+                    if (ost.likes.includes(localUser?._id)) {
+                        setLikes([...likes, ost._id]);
+                    }
+                }
                 setPosts(p);
             })
             .catch((err) => {
@@ -381,29 +392,6 @@ export default function FeedPage() {
                                                     : ""
                                             }`}
                                         >
-                                            {/* {localUser._id === post.user._id ? (
-                                        <BiPencil
-                                            className="editPost"
-                                            onClick={(e) => {
-                                                setUpdatePost(post);
-                                                setEditingPost(post._id);
-                                                handleShow(e);
-                                            }}
-                                        />
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {localUser._id === post.user._id &&
-                                    deletingPost !== post._id ? (
-                                        <BiTrash
-                                            className="deletePost"
-                                            onClick={async (e) => {
-                                                deletePost(post._id);
-                                            }}
-                                        />
-                                    ) : (
-                                        <></>
-                                    )} */}
                                             <div className="post-author">
                                                 <div>
                                                     <img
@@ -460,12 +448,73 @@ export default function FeedPage() {
                                                 <></>
                                             )}
                                         </div>
-                                        <div className="post-buttons">
-                                            <div>
-                                                <BiLike size={20} />
+                                        <div className="post-stats">
+                                            <div className="likes">
+                                                {post?.likes?.length || 0} likes
+                                            </div>
+                                            <div className="likes">
+                                                {post?.comments?.length || 0}{" "}
+                                                comments
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={
+                                                commentBox === post._id
+                                                    ? "post-buttons-alt"
+                                                    : "post-buttons-alt"
+                                            }
+                                        >
+                                            <div
+                                                className={
+                                                    likes.includes(post._id)
+                                                        ? "liked"
+                                                        : ""
+                                                }
+                                                onClick={(e) => {
+                                                    request
+                                                        .get(
+                                                            request.getURL() +
+                                                                "/posts/" +
+                                                                post._id +
+                                                                "/like/" +
+                                                                localUser?._id
+                                                        )
+                                                        .then(({ liked }) => {
+                                                            console.log(liked);
+                                                            if (liked) {
+                                                                setLikes([
+                                                                    ...likes,
+                                                                    post._id,
+                                                                ]);
+                                                            } else {
+                                                                let newLikes =
+                                                                    likes.filter(
+                                                                        (
+                                                                            like
+                                                                        ) =>
+                                                                            like !==
+                                                                            post._id
+                                                                    );
+                                                                setLikes([
+                                                                    ...newLikes,
+                                                                ]);
+                                                            }
+                                                        });
+                                                }}
+                                            >
+                                                {likes.includes(post._id) && (
+                                                    <AiFillLike size={20} />
+                                                )}
+                                                {!likes.includes(post._id) && (
+                                                    <AiOutlineLike size={20} />
+                                                )}
                                                 Like
                                             </div>
-                                            <div>
+                                            <div
+                                                onClick={(e) => {
+                                                    setCommentBox(post._id);
+                                                }}
+                                            >
                                                 <BiCommentDetail size={20} />
                                                 Comment
                                             </div>
@@ -478,21 +527,115 @@ export default function FeedPage() {
                                                 Send
                                             </div>
                                         </div>
-                                        <Collapse>
-                                            <div>
-                                                {posts[0]?.comments &&
-                                                    posts[0]?.comments.map(
-                                                        (comment, index) => (
-                                                            <CommentComp
-                                                                key={index}
-                                                                comment={
-                                                                    comment
+                                        {commentBox === post._id && (
+                                            <>
+                                                <div className="addComment">
+                                                    <div>
+                                                        <img
+                                                            src={
+                                                                localUser?.image
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <Form
+                                                            className="d-flex"
+                                                            onSubmit={(e) => {
+                                                                e.preventDefault();
+                                                                request
+                                                                    .post(
+                                                                        request.getURL() +
+                                                                            "/comments/" +
+                                                                            post._id,
+                                                                        {
+                                                                            author: localUser._id,
+                                                                            parentPost:
+                                                                                post._id,
+                                                                            text: commentText,
+                                                                        }
+                                                                    )
+                                                                    .then(
+                                                                        (
+                                                                            comment
+                                                                        ) => {
+                                                                            fetchPosts();
+                                                                        }
+                                                                    );
+                                                            }}
+                                                        >
+                                                            <Form.Control
+                                                                type="text"
+                                                                placeholder="Add Comment"
+                                                                className="me-2"
+                                                                aria-label="Add Comment"
+                                                                value={
+                                                                    commentText
                                                                 }
+                                                                onChange={(
+                                                                    e
+                                                                ) => {
+                                                                    setCommentText(
+                                                                        e.target
+                                                                            .value
+                                                                    );
+                                                                }}
                                                             />
-                                                        )
-                                                    )}
-                                            </div>
-                                        </Collapse>
+                                                        </Form>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                        <div className="comment-box">
+                                            {post.comments.length !== 0 &&
+                                                post.comments
+                                                    .slice(0, 3)
+                                                    .map((comment) => (
+                                                        <div className="comment">
+                                                            <div className="user2">
+                                                                <div className="img-contain">
+                                                                    <img
+                                                                        src={
+                                                                            comment
+                                                                                .author
+                                                                                .image
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                                <div className="personname">
+                                                                    <Link
+                                                                        to={`/in/${comment.author._id}`}
+                                                                    >
+                                                                        <span>
+                                                                            {
+                                                                                comment
+                                                                                    .author
+                                                                                    .name
+                                                                            }{" "}
+                                                                            {
+                                                                                comment
+                                                                                    .author
+                                                                                    .surname
+                                                                            }
+                                                                        </span>
+                                                                    </Link>
+                                                                    <br />
+                                                                    <span>
+                                                                        {
+                                                                            comment.text
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <span className="timeago">
+                                                                {request.timeSince(
+                                                                    new Date(
+                                                                        comment.createdAt
+                                                                    )
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                        </div>
                                     </>
                                 )
                         )}

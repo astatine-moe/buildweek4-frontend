@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import banner from "../banner.png";
 import "../css/Profile.css";
-import { BiPencil, BiSearch } from "react-icons/bi";
+import { BiPen, BiPencil, BiSearch, BiTrash } from "react-icons/bi";
 import {
     BsFillPeopleFill,
     BsFillEyeFill,
     BsArrowRight,
     BsImage,
 } from "react-icons/bs";
-import { Row, Col, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
+import {
+    Row,
+    Col,
+    Button,
+    Tooltip,
+    OverlayTrigger,
+    ListGroup,
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import request from "../Utility/fetch";
 /* modals */
@@ -90,6 +97,15 @@ const ProfileCenter = (props) => {
 
     const closeEditForm = () => {
         setEditFormOpen(false);
+    };
+
+    const deleteExperience = (id) => {
+        request
+            .delete(request.getURL() + "/experiences/" + id)
+            .then((data) => {
+                fetchProfile(localUser._id);
+            })
+            .catch(console.error);
     };
 
     const handleEditExperience = async (e) => {
@@ -239,11 +255,6 @@ const ProfileCenter = (props) => {
 
         const formData = new FormData();
         formData.append("image", image);
-
-        // request.post(
-        //     request.getURL() + "/users/" + localUser._id + "/picture",
-        //     formData
-        // );
 
         const response = await fetch(
             request.getURL() + "/users/" + localUser._id + "/picture",
@@ -431,18 +442,45 @@ const ProfileCenter = (props) => {
                             </button>
                         </div>
                         <hr></hr>
-                        {profile.experiences.map((experience, index) => (
-                            <div key={index}>
-                                <p>Role: {experience.role}</p>
-                                <p>Company: {experience.company}</p>
-                                <Button
-                                    onClick={() => openEditForm(experience)}
+                        <div className="list-group">
+                            {profile.experiences.map((experience, index) => (
+                                <a
+                                    href="#"
+                                    className="list-group-item list-group-item-action flex-column align-items-start"
                                 >
-                                    Edit
-                                </Button>
-                                <hr></hr>
-                            </div>
-                        ))}
+                                    <div className="d-flex w-100 justify-content-between">
+                                        <h5 className="mb-1">
+                                            {experience.company}
+                                        </h5>
+                                        <small>
+                                            <Button
+                                                size="sm"
+                                                onClick={() =>
+                                                    openEditForm(experience)
+                                                }
+                                            >
+                                                <BiPencil />
+                                            </Button>
+                                            <span
+                                                style={{ marginRight: ".5em" }}
+                                            />
+                                            <Button
+                                                onClick={(e) => {
+                                                    deleteExperience(
+                                                        experience._id
+                                                    );
+                                                }}
+                                                variant="danger"
+                                                size="sm"
+                                            >
+                                                <BiTrash />
+                                            </Button>
+                                        </small>
+                                    </div>
+                                    <p className="mb-1">{experience.role}</p>
+                                </a>
+                            ))}
+                        </div>
                     </div>
                     <div className="profile-section education">
                         <h5>Education</h5>
